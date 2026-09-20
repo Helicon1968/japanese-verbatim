@@ -328,16 +328,30 @@ uv run --no-project --python 3.12 --with faster-whisper --with imageio-ffmpeg \
 
 # 本実行（.jv/work/ に出力、.jv/cache/ にキャッシュ）
 uv run --no-project --python 3.12 --with faster-whisper --with imageio-ffmpeg \
-    python $SK/scripts/transcribe.py <動画> --model small --beam 5 --no-hotwords
+    python $SK/scripts/transcribe.py <動画> --model small --beam 5
 ```
 
 `--python 3.12` の明示は必須（省略すると tokenizers のビルドに落ちて失敗する）。
 ffmpeg のパスは固定せず `imageio_ffmpeg.get_ffmpeg_exe()` で毎回解決する。
 
-**`--no-hotwords` を外さないこと。** `transcribe.py` は既定で辞書から hotwords を
-注入するが、これは反復ループを誘発してその間の発話を丸ごと落とす。用語は手順4の
-事後置換で回復する。実測と根拠は `references/asr-playbook.md` の失敗モード3。
+**hotwords は既定で渡さない。`--hotwords` を付けないこと。**
+hotwords は反復ループを誘発し、その間の発話を丸ごと落とす（実測で約440語）。
+用語は手順4の事後置換で回復する。実測と根拠は
+`references/asr-playbook.md` の失敗モード3。
 そのほかの設定の根拠と失敗モードも同じファイルにある。
+
+**hotwords は速度も落とす。** 同じ素材で bench を取った実測。
+
+| bench の設定 | 速度 | 見積り | 本実行の実測 |
+|---|---|---|---|
+| hotwords あり | 0.87倍速 | 35分 | — |
+| **hotwords なし（既定）** | **1.43倍速** | **21分** | **19分** |
+
+以前は bench の例に `--no-hotwords` が無く、**本実行と違う設定で速度を測っていた**。
+見積りが実測の1.8倍になり、当てにならなかった。既定を反転させたので、
+いまは bench と本実行が同じ設定で走る。
+
+`--no-hotwords` は互換のために受け付けるが、指定しなくても同じである。
 
 ## 3. ゲート1：文字起こしの品質（スキップ禁止）
 
@@ -362,7 +376,7 @@ python $SK/scripts/glossary.py add --wrong "CloudMD" --right "CLAUDE.md" --note 
 
 **辞書は事後の置換にだけ使う。hotwords として事前に渡さない。**
 hotwords は反復ループを誘発し、その間の発話を丸ごと落とす。手順2で
-`--no-hotwords` を付けるのはこのため（実測は asr-playbook の失敗モード3）。
+`transcribe.py` が既定で渡さないのはこのため（実測は asr-playbook の失敗モード3）。
 `glossary.py hotwords` は残してあるが、比較検証のとき以外は使わない。
 
 **照合元（fixed.txt）は `work/` ではなく `audit/` に置く。**
