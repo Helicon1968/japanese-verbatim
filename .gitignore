@@ -22,3 +22,6 @@ fixed.txt
 src_corrected.txt
 frames/
 out/
+
+# メンテナ向けの覚え書き。手元だけで使うので公開しない
+CLAUDE.md
