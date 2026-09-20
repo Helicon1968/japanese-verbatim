@@ -12,7 +12,7 @@ Claude Code を使っていて、英語の技術発信を腰を据えて読み�
 | [特長](#特長) | 訳しただけでは読めない。補足・画面の取り込み・品質ゲートで補う |
 | [著作権について](#著作権について) | **最初に読む。** 生成物は公開できない。公開する場合は利用者の責任 |
 | [必要なもの](#必要なもの) | Claude Code と uv だけ |
-| [インストール](#インストール) | スキルディレクトリに clone する |
+| [インストール](#インストール) | スキルディレクトリに clone する。更新は git pull |
 | [使い方](#使い方) | 呼び方、処理の流れ、作業領域の規約 |
 | [4つのゲート](#4つのゲート) | 検証できないことは合格ではない |
 | [設計上の判断](#設計上の判断) | 既定設定を使わない理由、hotwords をやめた理由 |
@@ -139,6 +139,31 @@ Windows（PowerShell）:
 
 ```powershell
 git clone https://github.com/Helicon1968/japanese-verbatim "$env:USERPROFILE\.claude\skills\japanese-verbatim"
+```
+
+### 更新
+
+新しい版を取るときは pull する。
+
+```bash
+cd ~/.claude/skills/japanese-verbatim && git pull
+```
+
+```powershell
+cd "$env:USERPROFILE\.claude\skills\japanese-verbatim"; git pull
+```
+
+辞書（`glossary/terms.json`）に自分で語を足していると、pull が衝突することがある。
+その場合は手元の変更を退避してから取り込み、必要な語を足し直す。
+
+```bash
+git stash && git pull && git stash pop
+```
+
+特定の版に固定したいときは、`git tag` で一覧を見てから切り替える。
+
+```bash
+git tag && git checkout <タグ>
 ```
 
 ---
