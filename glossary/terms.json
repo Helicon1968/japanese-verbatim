@@ -522,6 +522,286 @@
    "ci": true,
    "note": "cloud/clot/clod と同系。時計の意味なら置換しないこと",
    "added": "2026-09-17"
+  },
+  {
+   "wrong": "agenty",
+   "right": "agentic",
+   "mode": "auto",
+   "ci": true,
+   "note": "agentic stack が agenty stack に落ちる",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "ADKE",
+   "right": "ADK",
+   "mode": "auto",
+   "ci": true,
+   "note": "語尾に母音が付く",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "NCP",
+   "right": "MCP",
+   "mode": "auto",
+   "ci": true,
+   "note": "MCP の M を N と誤る",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "land graph",
+   "right": "LangGraph",
+   "mode": "auto",
+   "ci": true,
+   "note": "エージェント枠組みの名前",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "land chain",
+   "right": "LangChain",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "crew AI",
+   "right": "CrewAI",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "JSON-RCP",
+   "right": "JSON-RPC",
+   "mode": "auto",
+   "ci": true,
+   "note": "RPC の綴り崩れ",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "light LLM",
+   "right": "LiteLLM",
+   "mode": "auto",
+   "ci": true,
+   "note": "ADK の LLM 抽象層",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "bullet plate",
+   "right": "boilerplate",
+   "mode": "auto",
+   "ci": true,
+   "note": "定型コードの意味",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "Engine Engine",
+   "right": "Agent Engine",
+   "mode": "auto",
+   "ci": true,
+   "note": "Vertex AI Agent Engine",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "gas list",
+   "right": "guest list",
+   "mode": "auto",
+   "ci": true,
+   "note": "定型句。guest が gas に落ちる",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "upper running",
+   "right": "up and running",
+   "mode": "auto",
+   "ci": true,
+   "note": "定型句",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "agent space",
+   "right": "Agentspace",
+   "mode": "auto",
+   "ci": true,
+   "note": "Google Cloud の製品名。2語に割れる",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "comnet",
+   "right": "ConvNet",
+   "mode": "auto",
+   "ci": true,
+   "note": "畳み込みネット。ML講演で頻出",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "comnets",
+   "right": "ConvNets",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上の複数形",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "Common NJS",
+   "right": "ConvNetJS",
+   "mode": "auto",
+   "ci": true,
+   "note": "Karpathy の JS ライブラリ",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "male spectrogram",
+   "right": "mel spectrogram",
+   "mode": "auto",
+   "ci": true,
+   "note": "メルスペクトログラム",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "alfalfold",
+   "right": "AlphaFold",
+   "mode": "auto",
+   "ci": true,
+   "note": "DeepMind のタンパク質構造予測",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "Aspechevsky",
+   "right": "Alex Krizhevsky",
+   "mode": "auto",
+   "ci": true,
+   "note": "AlexNet の著者",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "Joshua Benjiro",
+   "right": "Yoshua Bengio",
+   "mode": "auto",
+   "ci": true,
+   "note": "人名",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "radium descent",
+   "right": "gradient descent",
+   "mode": "auto",
+   "ci": true,
+   "note": "勾配降下法",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "radium based",
+   "right": "gradient based",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "layer known",
+   "right": "LayerNorm",
+   "mode": "auto",
+   "ci": true,
+   "note": "層正規化",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "causal salt attention",
+   "right": "causal self-attention",
+   "mode": "auto",
+   "ci": true,
+   "note": "self が salt に落ちる",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "cross-interview loss",
+   "right": "cross-entropy loss",
+   "mode": "auto",
+   "ci": true,
+   "note": "交差エントロピー損失",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "message-fasting",
+   "right": "message passing",
+   "mode": "auto",
+   "ci": true,
+   "note": "メッセージ伝達",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "master passing",
+   "right": "message passing",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "DPE tokens",
+   "right": "BPE tokens",
+   "mode": "auto",
+   "ci": true,
+   "note": "Byte Pair Encoding",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "mid-journey",
+   "right": "Midjourney",
+   "mode": "auto",
+   "ci": true,
+   "note": "画像生成サービス",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "co-captinate",
+   "right": "concatenate",
+   "mode": "auto",
+   "ci": true,
+   "note": "連結する",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "int context",
+   "right": "in-context",
+   "mode": "auto",
+   "ci": true,
+   "note": "文脈内学習",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "ChashiPT",
+   "right": "ChatGPT",
+   "mode": "auto",
+   "ci": true,
+   "note": "崩れ方の一種",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "JetGPT",
+   "right": "ChatGPT",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "resonant",
+   "right": "ResNet",
+   "mode": "review",
+   "ci": true,
+   "note": "ML文脈のみ。共振の意味なら置換しない",
+   "added": "2026-09-20"
+  },
+  {
+   "wrong": "testers",
+   "right": "tensors",
+   "mode": "review",
+   "ci": true,
+   "note": "ML文脈のみ。試験者の意味なら置換しない",
+   "added": "2026-09-20"
   }
  ]
 }
