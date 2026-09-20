@@ -1,0 +1,24 @@
+# --- Python ---
+__pycache__/
+*.pyc
+
+# --- 作業領域 ---
+# workspace.py が作る。出典の生データ・中間ファイル・キャッシュが入る。
+.jv/
+# 旧レイアウトの名残（0.x 系 / さらに前の名前）
+.jv-cache/
+.s2md-cache/
+
+# --- 成果物 ---
+# 訳文・文字起こし・取り込んだ画像は原著作物の二次的著作物にあたる。
+# リポジトリに入れない（README「著作権について」）。
+*.assets/
+*.exempt.txt
+transcript.json
+transcript.txt
+*.transcript.json
+raw.txt
+fixed.txt
+src_corrected.txt
+frames/
+out/

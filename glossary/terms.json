@@ -1,0 +1,527 @@
+{
+ "version": 1,
+ "updated": "2026-09-20",
+ "_note": "語・短い固有名詞のみを収録する。長いフレーズを蓄積しないこと（辞書が事実の集合である限り公開可能）。hotwords は事前に渡さない — 反復ループを誘発して発話を落とす（references/asr-playbook.md 失敗モード3）。置換は事後に行う。",
+ "hotwords": [
+  "Claude Code",
+  "CLAUDE.md",
+  "Anthropic",
+  "Claude",
+  "Opus",
+  "Sonnet",
+  "Haiku",
+  "MCP",
+  "MCP server",
+  "subagent",
+  "subagents",
+  "Agent SDK",
+  "agent teams",
+  "hooks",
+  "skills",
+  "plugins",
+  "slash command",
+  "Ghostty",
+  "Bun",
+  "Next.js",
+  "React",
+  "TypeScript",
+  "context window",
+  "tokens",
+  "plan mode",
+  "permissions",
+  "allowlist",
+  "worktree",
+  "git",
+  "pull request",
+  "repo",
+  "SKILL.md",
+  "frontmatter",
+  "markdown",
+  "YAML",
+  "JSON",
+  "API",
+  "LLM",
+  "prompt",
+  "compaction",
+  "tool use",
+  "AskUserQuestion",
+  "harness",
+  "blast radius",
+  "idempotent",
+  "trajectory"
+ ],
+ "replacements": [
+  {
+   "wrong": "CloudMD",
+   "right": "CLAUDE.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "最頻出",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Cloud MD",
+   "right": "CLAUDE.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Claude MD",
+   "right": "CLAUDE.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Claude.md",
+   "right": "CLAUDE.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "正規表記に統一",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Cloud Code",
+   "right": "Claude Code",
+   "mode": "auto",
+   "ci": true,
+   "note": "焼き込み字幕にも頻出",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Ghosty",
+   "right": "Ghostty",
+   "mode": "auto",
+   "ci": true,
+   "note": "ターミナルエミュレータ",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "pool request",
+   "right": "pull request",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Myers-Brace",
+   "right": "Myers-Briggs",
+   "mode": "auto",
+   "ci": true,
+   "note": "MBTI",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "PowerApp",
+   "right": "/powerup",
+   "mode": "auto",
+   "ci": true,
+   "note": "Claude Code のコマンド。画面表示で /powerup（1語）を確認",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "D&D kit",
+   "right": "dnd-kit",
+   "mode": "auto",
+   "ci": true,
+   "note": "ドラッグ&ドロップのライブラリ",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "MonoRebo",
+   "right": "monorepo",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "clot-plugin",
+   "right": ".claude-plugin",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Auroboros",
+   "right": "ouroboros",
+   "mode": "auto",
+   "ci": true,
+   "note": "ウロボロス",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "disable model invocation",
+   "right": "disable-model-invocation",
+   "mode": "auto",
+   "ci": true,
+   "note": "SKILL.md の frontmatter キー",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "user invocable",
+   "right": "user-invocable",
+   "mode": "auto",
+   "ci": true,
+   "note": "SKILL.md の frontmatter キー",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "share task list",
+   "right": "shared task list",
+   "mode": "auto",
+   "ci": true,
+   "note": "Agent Teams",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "SRC copays",
+   "right": "src codebase",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Q&A",
+   "right": "QA",
+   "mode": "review",
+   "ci": false,
+   "note": "品質保証(QA)と質疑応答(Q&A)のどちらか文脈で判断",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "step space",
+   "right": "step-based",
+   "mode": "review",
+   "ci": true,
+   "note": "誤認識でない可能性あり",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "dash agents",
+   "right": "/agents",
+   "mode": "review",
+   "ci": true,
+   "note": "スラッシュコマンドを dash と認識する傾向。dash fork 等も同様",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "a skill to SH",
+   "right": "skills.sh",
+   "mode": "review",
+   "ci": true,
+   "note": "URL の読み上げ",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "Opus Max",
+   "right": "Opus + effort max",
+   "mode": "review",
+   "ci": true,
+   "note": "エフォートレベルの言い回し。製品名として書かれている場合は置換しない",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "MonoRebo1",
+   "right": "monorepo1",
+   "mode": "auto",
+   "ci": true,
+   "note": "語境界のため MonoRebo だけでは一致しない",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "user prompts submit",
+   "right": "UserPromptSubmit",
+   "mode": "auto",
+   "ci": true,
+   "note": "フック名",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "post tool use",
+   "right": "PostToolUse",
+   "mode": "auto",
+   "ci": true,
+   "note": "フック名",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "pre tool use",
+   "right": "PreToolUse",
+   "mode": "auto",
+   "ci": true,
+   "note": "フック名",
+   "added": "2026-09-16"
+  },
+  {
+   "wrong": "clod and defile",
+   "right": "CLAUDE.md file",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで頻出",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clod",
+   "right": "Claude",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで頻出",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clodify",
+   "right": "claudify",
+   "mode": "auto",
+   "ci": true,
+   "note": "Claude を動詞化した造語。clod/clot 系の誤認識と同根",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Cloud Desktop",
+   "right": "Claude desktop",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Cloud AI",
+   "right": "claude.ai",
+   "mode": "auto",
+   "ci": true,
+   "note": "claude.ai の読み上げ",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Cloud Design",
+   "right": "Claude Design",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Bunn",
+   "right": "Bun",
+   "mode": "auto",
+   "ci": true,
+   "note": "JavaScriptランタイム",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "sauna",
+   "right": "Sonnet",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで発生",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "subrebo",
+   "right": "subrepo",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Cloud",
+   "right": "Claude",
+   "mode": "review",
+   "ci": true,
+   "note": "cloud computing の意味なら置換しないこと",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clot code",
+   "right": "Claude Code",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで発生",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "claw code",
+   "right": "Claude Code",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで発生",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clotmd",
+   "right": "CLAUDE.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで発生",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Maya sprays",
+   "right": "Myers-Briggs",
+   "mode": "auto",
+   "ci": true,
+   "note": "MBTI。Myers-Brace と同系の誤り",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clots, skilled deer",
+   "right": "${CLAUDE_SKILL_DIR}",
+   "mode": "auto",
+   "ci": true,
+   "note": "画面に表示された変数名で確認",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clock code",
+   "right": "Claude Code",
+   "mode": "auto",
+   "ci": true,
+   "note": "hotwordsなしで頻出",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "CloudCode",
+   "right": "Claude Code",
+   "mode": "auto",
+   "ci": true,
+   "note": "語間の空白が落ちた形",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Clut",
+   "right": "Claude",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Klot",
+   "right": "Claude",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "Sonet",
+   "right": "Sonnet",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "OPE is max",
+   "right": "Opus + effort max",
+   "mode": "auto",
+   "ci": true,
+   "note": "エフォートレベルの言い回し",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "SRC Go base",
+   "right": "src codebase",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "scale MD",
+   "right": "SKILL.md",
+   "mode": "auto",
+   "ci": true,
+   "note": "skill を scale と誤認識する傾向",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "custom scale",
+   "right": "custom skill",
+   "mode": "auto",
+   "ci": true,
+   "note": "同上",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "pose to use",
+   "right": "PostToolUse",
+   "mode": "auto",
+   "ci": true,
+   "note": "フック名",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "postal use",
+   "right": "PostToolUse",
+   "mode": "auto",
+   "ci": true,
+   "note": "フック名",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "every level levels",
+   "right": "effort levels",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "disabled model invocation",
+   "right": "disable-model-invocation",
+   "mode": "auto",
+   "ci": true,
+   "note": "SKILL.md の frontmatter キー",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "get work trees",
+   "right": "git worktrees",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "work trees",
+   "right": "worktrees",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "work tree",
+   "right": "worktree",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "next JS",
+   "right": "Next.js",
+   "mode": "auto",
+   "ci": true,
+   "note": "",
+   "added": "2026-09-17"
+  },
+  {
+   "wrong": "clock",
+   "right": "Claude",
+   "mode": "review",
+   "ci": true,
+   "note": "cloud/clot/clod と同系。時計の意味なら置換しないこと",
+   "added": "2026-09-17"
+  }
+ ]
+}
