@@ -201,8 +201,17 @@ def main() -> int:
         print(f"\n  [{status}] カバレッジ {ratio*100:.1f}% (下限 {args.min_coverage*100:.0f}%)")
         if ratio < args.min_coverage:
             findings.append(f"カバレッジ不足: {ratio*100:.1f}% — {(duration-covered)/60:.1f}分が未文字化")
+        coverage_unverified = False
     else:
-        print("\n  [SKIP ] カバレッジ: 音声長が不明のため判定不能")
+        # カバレッジはこのゲートの主目的である。測れなかったことを
+        # 「指摘なし」として通すと、いちばん重要な検査を飛ばしたまま
+        # GREEN が出る（実測: 素の python で走らせて ffmpeg が解決できず、
+        # SKIP のまま終了コード0になった）。検証できないことは合格ではない。
+        print("\n  [UNVER] カバレッジ: 音声長が不明のため判定できない")
+        print("          --audio を渡し、ffmpeg が解決できる環境で走らせること")
+        print("          uv run --no-project --python 3.12 --with imageio-ffmpeg \\")
+        print("              python verify_transcript.py … --audio <音声>")
+        coverage_unverified = True
 
     # --- 2/3. ギャップの発話判定 ----------------------------------------
     gaps = find_gaps(segs, duration, args.min_gap)
@@ -216,7 +225,7 @@ def main() -> int:
         for g in aligned[:5]:
             print(f"          {g['start']/60:6.2f}分〜 長さ {g['length']:.1f}秒")
 
-    unverified = False
+    unverified = coverage_unverified
     if gaps:
         if not (args.audio and ff):
             print("  [UNVER] ギャップの音量検証: 音声またはffmpegが無いため実行不能")
