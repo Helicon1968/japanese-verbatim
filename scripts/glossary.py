@@ -58,16 +58,52 @@ def save(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
 
+# 文字起こしの各行は「[12:34] 本文」の形をしている（transcribe.py）。
+# そのため2語以上の項目は、語と語の間に「改行＋時刻の見出し」が挟まって切れる。
+# 空白（\s+）だけでは繋がらないので、見出しも語間として認める。
+#
+#   [20:59] ADK, as I just said, but if you build agent with land
+#   [21:04] graph, LangChain, you can do that.
+#
+# 実測: ADK の land/graph、Transformer の SSI/amps。2回続けて取りこぼした。
+# 辞書は2語以上の項目が半数近くを占めるので、これは例外ではなく常態である。
+GAP = r"(\s+(?:\[\d{1,3}:\d{2}(?::\d{2})?\]\s*)?)"
+
+
 def build_pattern(entry: dict) -> re.Pattern:
     """語境界を意識したパターンを作る。ドットを含む語（CLAUDE.md）にも対応する。"""
     if entry.get("regex"):
         src = entry["wrong"]
     else:
-        # 文字起こしは行折り返しされるため、語間の空白は改行にもなりうる
-        body = r"\s+".join(re.escape(w) for w in entry["wrong"].split())
+        body = GAP.join(re.escape(w) for w in entry["wrong"].split())
         src = r"(?<![A-Za-z0-9_])" + body + r"(?![A-Za-z0-9_])"
     flags = re.IGNORECASE if entry.get("ci", True) else 0
     return re.compile(src, flags)
+
+
+def substitute(pat: re.Pattern, right: str, text: str) -> tuple[str, int]:
+    """置換する。行をまたいだ場合は、改行と時刻の見出しを残す。
+
+    語間を食べたまま置換すると、時刻が消えて2行が1行に繋がる。fixed.txt は
+    ゲート3の照合元であり、後から時刻で引くための記録でもあるので落とせない。
+    置換語は見出しのうしろ（次の行の先頭）へ送る。
+
+      直前  … you build agent with land / [21:04] graph, LangChain, …
+      直後  … you build agent with      / [21:04] LangGraph, LangChain, …
+
+    戻り値は (置換後のテキスト, 行をまたいだ件数)。
+    """
+    crossed = 0
+
+    def repl(m: re.Match) -> str:
+        nonlocal crossed
+        gaps = [g for g in m.groups() if g and "\n" in g]
+        if not gaps:
+            return right
+        crossed += 1
+        return "".join(gaps) + right
+
+    return pat.sub(repl, text), crossed
 
 
 # ---------------------------------------------------------------- 各コマンド
@@ -97,24 +133,29 @@ def cmd_apply(args) -> int:
 
     for e in data.get("replacements", []):
         pat = build_pattern(e)
-        hits = pat.findall(text)
-        if not hits:
+        count = sum(1 for _ in pat.finditer(text))
+        if not count:
             continue
         rec = {"wrong": e["wrong"], "right": e["right"],
-               "count": len(hits), "note": e.get("note", "")}
+               "count": count, "note": e.get("note", "")}
         if e.get("mode", "auto") == "review":
             flagged.append(rec)          # 文脈依存のため自動置換しない
         else:
-            text = pat.sub(e["right"], text)
+            text, crossed = substitute(pat, e["right"], text)
+            if crossed:
+                rec["crossed_lines"] = crossed
             applied.append(rec)
 
     out = args.output or args.input
     out.write_text(text, encoding="utf-8")
 
     total = sum(r["count"] for r in applied)
-    print(f"置換: {len(applied)}種 / {total}箇所 -> {out}")
+    crossed_total = sum(r.get("crossed_lines", 0) for r in applied)
+    tail = f"（うち行またぎ {crossed_total}箇所）" if crossed_total else ""
+    print(f"置換: {len(applied)}種 / {total}箇所{tail} -> {out}")
     for r in sorted(applied, key=lambda x: -x["count"]):
-        print(f"  {r['count']:4d}  {r['wrong']!r} -> {r['right']!r}")
+        mark = "  ←行またぎ" if r.get("crossed_lines") else ""
+        print(f"  {r['count']:4d}  {r['wrong']!r} -> {r['right']!r}{mark}")
     if flagged:
         print(f"\n要確認（自動置換しない）: {len(flagged)}種")
         for r in flagged:

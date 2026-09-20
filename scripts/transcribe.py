@@ -110,9 +110,14 @@ def main() -> int:
     p.add_argument("--beam", type=int, default=5)
     p.add_argument("--language", default="en")
     p.add_argument("--threads", type=int, default=8)
+    # hotwords は既定で渡さない。語の精度は上がるが反復ループを誘発し、
+    # その間の発話を丸ごと落とす（asr-playbook の失敗モード3、実測で約440語）。
+    # 手順4の事後置換で回復するほうが安全なので、危ないほうを既定にしない。
     p.add_argument("--no-hotwords", action="store_true",
-                   help="hotwords を渡さずに回す。hotwords は語の精度を上げる一方で"
-                        "反復ループを誘発することがある（asr-playbook 参照）")
+                   help="既定の挙動。互換のために残してある（指定しなくても渡さない）")
+    p.add_argument("--hotwords", action="store_true",
+                   help="hotwords を渡す。**通常は使わない。** hotwords の有無で"
+                        "出力がどう変わるかを比べたいときだけ（asr-playbook 参照）")
     p.add_argument("--out-dir", type=Path, default=Path(".jv/work"))
     p.add_argument("--cache-dir", type=Path, default=Path(".jv/cache"))
     p.add_argument("--bench", action="store_true",
@@ -141,9 +146,9 @@ def main() -> int:
     duration = media_duration(ff, audio) or 0.0
     print(f"        長さ {duration/60:.1f} 分")
 
-    hw = "" if args.no_hotwords else hotwords()
-    print("[info ] hotwords なし（--no-hotwords）" if not hw
-          else f"[info ] hotwords {len(hw.split(','))} 語")
+    hw = hotwords() if args.hotwords else ""
+    print(f"[info ] hotwords {len(hw.split(','))} 語 — **比較検証のときだけ使うこと**"
+          if hw else "[info ] hotwords なし（既定）")
 
     # --- ベンチ ----------------------------------------------------------
     if args.bench:

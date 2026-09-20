@@ -312,9 +312,16 @@ scripts/
   verify_style.py             ゲート4：文体の一貫性
   glossary.py                 用語辞書の適用・追加・集計
   grab_frames.py              画面変化のフレーム抽出
+  contact_sheet.py            候補フレームの一覧表（選別用）
   fetch_images.py             出典画像の取得
   make_appendix.py            精度に関する付録の生成
+tests/
+  test_glossary.py            辞書の置換（行またぎの回帰を含む）
+  test_workspace.py           後始末（掴まれたディレクトリの回帰を含む）
 ```
+
+テストは枠組みを使わない。`python tests/test_glossary.py` のように直接走らせる。
+どちらも**2回以上再現した不具合の回帰**を残したものである。
 
 ---
 

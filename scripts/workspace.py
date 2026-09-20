@@ -237,6 +237,29 @@ def cmd_status(args) -> int:
     return 0
 
 
+def clear_dir(path: Path) -> list[Path]:
+    """path の中身を消す。path 自体は残す。消せなかったものを返す。
+
+    shutil.rmtree は1つでも掴まれていると PermissionError で落ちる。
+    Dropbox・OneDrive・検索インデクサ・ウイルス対策が、直前まで書いていた
+    ディレクトリを掴んでいることは珍しくない（実測: Dropbox 配下で2回）。
+
+    そのとき中身は消えているのにスタックトレースだけが出て、片付いたのか
+    失敗したのかが分からなくなる。**空のディレクトリが残るのは実害がない**ので、
+    ファイルを1つずつ消し、消せなかったものだけを報告する。
+    """
+    failed: list[Path] = []
+    for p in sorted(path.rglob("*"), key=lambda q: len(q.parts), reverse=True):
+        try:
+            if p.is_dir() and not p.is_symlink():
+                p.rmdir()
+            else:
+                p.unlink()
+        except OSError:
+            failed.append(p)
+    return failed
+
+
 def cmd_finish(args) -> int:
     out = args.out_dir.resolve()
     root = jv_root(out)
@@ -278,6 +301,7 @@ def cmd_finish(args) -> int:
         print("\n確認のみです。実際に削除するには --apply を付けてください。")
         return 0
 
+    failed: list[Path] = []
     for t in targets:
         if not t.exists():
             continue
@@ -285,10 +309,25 @@ def cmd_finish(args) -> int:
         if jv_root(out).resolve() not in t.resolve().parents:
             print(f"中止: {t} は .jv/ の内側ではありません", file=sys.stderr)
             return 1
-        shutil.rmtree(t)
+        failed += clear_dir(t)
         t.mkdir(parents=True, exist_ok=True)
         print(f"削除: {t.relative_to(out)}")
+
     print(f"\n完了: {total_n}ファイル / {human(total_sz)} を削除しました")
+
+    if failed:
+        stuck_files = [p for p in failed if p.is_file()]
+        print(f"\n注意: {len(failed)}件を消せませんでした（他のプロセスが使用中）")
+        for p in failed[:10]:
+            print(f"  {'DIR ' if p.is_dir() else '    '}{p.relative_to(out)}")
+        if len(failed) > 10:
+            print(f"  ... 他 {len(failed)-10}件")
+        if stuck_files:
+            print("\n  **ファイルが残っています。** 中身を確認して手で処理すること。")
+            return 1
+        print("\n  空のディレクトリだけなので実害はありません。")
+        print("  Dropbox や検索インデクサが掴んでいることが多い。")
+        print("  気になるなら時間をおいて finish --apply を再実行できます。")
     return 0
 
 
