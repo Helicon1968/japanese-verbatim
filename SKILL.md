@@ -72,10 +72,8 @@ python $SK/scripts/workspace.py start --source <ファイルかURL> --name <日�
 - **📝補足を必ず付ける。** 原文にない背景・前提・落とし穴を足すのが価値の中心である。
   抽出しただけの要約なら、このスキルを通す必要がない。
   **どこからが自分の記述かを節で分ける**（原文の主張と補足を混ぜない）
-- **出典画像は通常どおり組み込む**（手順1-2）。情報を持つ画像は元画像を貼り、
-  装飾画像は一行の説明に留める。`get_page_text` は画像を落とすので、
-  **DOM から列挙して1点ずつ中身を確認する**。本文に書かれていない情報が
-  図にだけ入っていることがある
+- **出典画像は通常どおり組み込む**（手順1-2。全点を取得して中身を確認する）。
+  本文に書かれていない情報が図にだけ入っていることがある
 
 目次・出典の明示・文体・後始末も変わらない。
 
@@ -199,7 +197,7 @@ python $SK/scripts/workspace.py start \
 |---|---|
 | 原文が持つASCII図 | コードフェンスでそのまま再現する。改変しない |
 | 原文の画像で**情報を持つもの**（図解・スクリーンショット） | **必ず元画像を貼る**（手順1-2）。Mermaidで描き直さない |
-| 原文の**装飾画像**（タイトル画像・ヘッダー等） | 一行で内容を説明するだけにする。取得しない |
+| 原文の**装飾画像**（タイトル画像・ヘッダー等） | 一行で内容を説明するだけにする。本文には貼らない |
 | **動画の画面**（設定ファイル・コマンド・ツールの出力） | 該当時刻のフレームを貼る（手順5-2）。選定基準は5-3 |
 | 訳者が理解を助けるために足す図 | **Mermaid で描く。**「訳者による作図」と明記する |
 
@@ -343,20 +341,22 @@ I probably would have called a transformer a … computer instead of attention i
 ```
 
 X/Twitter のメディアIDは投稿DOM中の `pbs.twimg.com/media/<ID>` から取れる。
-記録しておけば `fetch_images.py` が取得計画と参照タグを生成する。
+**この時点の説明は仮である**（画像を見る前の推測）。中身を見て書き直す（手順1-2）。
 
 ### 1-2. 出典画像の組み込み
 
+**装飾かどうかは画像を見てから決める。** 仮の説明で取捨すると外れる（実測: 23点中7点が外れ、1点は本文に無い数字を持つ唯一の図だった）。
+
 ```bash
-python $SK/scripts/fetch_images.py --raw .jv/audit/raw.txt --name <名前>          # 計画の確認
-python $SK/scripts/fetch_images.py --raw .jv/audit/raw.txt --name <名前> --apply  # 取得
+python $SK/scripts/fetch_images.py --raw .jv/audit/raw.txt --name <名前> --include-decorative          # 計画
+python $SK/scripts/fetch_images.py --raw .jv/audit/raw.txt --name <名前> --include-decorative --apply  # 全点を取得
+uv run --no-project --python 3.12 --with pillow python $SK/scripts/contact_sheet.py \
+       <名前>.assets --glob "*.jpg" --out .jv/work/sheets                                       # 一覧で見る
 ```
 
-保存先は `<名前>.assets/` で、**成果物の一部**として残す（`.jv/work/` ではない）。
-出力された `![...](...)` を本文の該当箇所に貼る。
-
-扱いの区別は「図版の扱い（重要）」のとおり。情報を持つ画像は必ず元画像を貼り、
-装飾画像は一行の説明に留める。ASCIIアートでもMermaidでも描き起こさない。
+見たうえで raw.txt の説明と `decorative` の有無を書き直す。基準は**本文に無い情報を持つか**。
+**書き直した後に再実行しない**（ファイル名は説明文と連番から作るので、名前が変わり古いファイルが残る）。
+本文からは取得時のファイル名（`index.json`）で参照する。`<名前>.assets/` は**成果物の一部**として残す。
 
 **ダウンロードはユーザーの承認が要る操作である。** `--apply` を実行する前に、
 点数と合計サイズを示して確認を取ること。

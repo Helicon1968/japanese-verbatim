@@ -128,6 +128,13 @@ def register(sent: str) -> str:
     return "不明"
 
 
+# 箇条書きの記号。記号のあとに空白が続くものだけを箇条書きとみなす。
+# 以前は行頭の `*` だけで弾いていたため、`**強調**` で始まる地の文まで
+# 箇条書きとして捨てていた。要点版では判定対象が7文しか残らず、
+# ゲートは GREEN なのに実際にはほとんど検査していなかった（偽陰性）。
+BULLET = re.compile(r"^([-*+]|\d+\.)\s")
+
+
 def is_checkable(line: str) -> bool:
     """文体を見るべき行か。
 
@@ -137,9 +144,9 @@ def is_checkable(line: str) -> bool:
     s = line.strip()
     if not s:
         return False
-    if s.startswith(("-", "*", "+", "|", "#", ">", "〔", "```")):
+    if BULLET.match(s):
         return False
-    if re.match(r"^\d+\.", s):
+    if s.startswith(("|", "#", ">", "〔", "```")):
         return False
     return True
 
@@ -201,7 +208,7 @@ def collect(block: dict) -> list[tuple[int, str, str]]:
             if not s.startswith(">"):
                 continue
             s = s[1:].strip()
-            if not s or s.startswith(("-", "*", "|", "〔", "**")):
+            if not s or BULLET.match(s) or s.startswith(("|", "〔")):
                 continue
         elif not is_checkable(ln):
             continue
