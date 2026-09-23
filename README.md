@@ -301,6 +301,8 @@ uv のキャッシュパスはハッシュを含む。固定すると環境が�
 SKILL.md                      手順と規約の本体
 references/
   asr-playbook.md             文字起こしの設定と既知の失敗モード5種（実測付き）
+  glossary-guide.md           用語辞書の auto/review の使い分けと、辞書で拾えないもの（手順4の詳細）
+  screen-sources.md           画面付きソースの補強 5-1〜5-4（手順5の本文）
 glossary/
   terms.json                  技術用語の誤認識辞書
 scripts/
