@@ -24,6 +24,7 @@
 使い方:
     python verify_style.py 成果物.md
     python verify_style.py 成果物.md --show-runs   # 例外候補も一覧する
+    python verify_style.py 成果物.md --japanese-source   # ソースが日本語（原文訳が無い）
 """
 
 from __future__ import annotations
@@ -185,23 +186,31 @@ def parse_blocks(lines: list[str]) -> list[dict]:
     return blocks
 
 
-def expected(block: dict) -> str | None:
-    """このブロックに期待される文体。None なら検査しない。"""
+def expected(block: dict, polite_blocks=POLITE_BLOCKS,
+             plain_blocks=PLAIN_BLOCKS, japanese_source=False) -> str | None:
+    """このブロックに期待される文体。None なら検査しない。
+
+    japanese_source のとき原文訳ブロックは存在しない。引用記法の外は
+    すべて訳者の記述なので常体を期待する。引用記法の中は元の著者の文で
+    あり、is_checkable() が読み飛ばす（著者の文体を叱らない）。
+    """
     if any(k in block["name"] for k in SKIP_BLOCKS):
         return None
-    if any(k in block["name"] for k in POLITE_BLOCKS):
+    if japanese_source:
+        return "常体"
+    if any(k in block["name"] for k in polite_blocks):
         return "敬体"
-    if any(k in block["name"] for k in PLAIN_BLOCKS):
+    if any(k in block["name"] for k in plain_blocks):
         return "常体"
     if PLAIN_SECTIONS.match(block["section"]):
         return "常体"
     return None
 
 
-def collect(block: dict) -> list[tuple[int, str, str]]:
+def collect(block: dict, exp: str) -> list[tuple[int, str, str]]:
     """(行番号, 文, 文体) の列。原文訳は引用記法の中身を見る。"""
     out = []
-    polite = expected(block) == "敬体"
+    polite = exp == "敬体"
     for n, ln in block["lines"]:
         s = ln.strip()
         if polite:
@@ -240,7 +249,22 @@ def main() -> int:
     p.add_argument("--show-runs", action="store_true",
                    help="例外候補（常体の連続）も一覧する")
     p.add_argument("--max-report", type=int, default=12)
+    # verify_doc.py と同じ名前・同じ意味。ブロック名を変えた文書に使う。
+    p.add_argument("--translation-label", default=None,
+                   help="敬体を期待するブロック名（既定: 原文訳）")
+    p.add_argument("--note-label", default=None,
+                   help="常体を期待するブロック名（既定: 補足）")
+    p.add_argument("--japanese-source", action="store_true",
+                   help="ソースが日本語で原文訳が無い文書（SKILL.md 0-2）。"
+                        "引用記法の外をすべて訳者の記述として常体で検査する")
     args = p.parse_args()
+    if args.japanese_source and args.translation_label:
+        # 日本語ソースの引用は元の著者の文。敬体の揺れとして叱ると誤検出になる
+        p.error("--japanese-source と --translation-label は併用できない"
+                "（日本語ソースの引用ブロックは著者の文体のままなので検査しない）")
+    polite_blocks = ((args.translation_label,) if args.translation_label
+                     else POLITE_BLOCKS)
+    plain_blocks = (args.note_label,) if args.note_label else PLAIN_BLOCKS
 
     lines = args.doc.read_text(encoding="utf-8").splitlines()
     blocks = parse_blocks(lines)
@@ -257,10 +281,10 @@ def main() -> int:
 
     n_polite = n_plain = 0
     for b in blocks:
-        exp = expected(b)
+        exp = expected(b, polite_blocks, plain_blocks, args.japanese_source)
         if exp is None:
             continue
-        items = collect(b)
+        items = collect(b, exp)
         if not items:
             continue
         if exp == "敬体":
